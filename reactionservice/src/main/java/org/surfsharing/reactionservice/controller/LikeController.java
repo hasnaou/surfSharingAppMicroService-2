@@ -1,6 +1,8 @@
 package org.surfsharing.reactionservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,8 @@ import java.util.List;
 @RequestMapping("/api/v1/likes")
 @RequiredArgsConstructor
 public class LikeController {
-
+    @Autowired
+    private Environment environment;
     private final ILikeservice likeService;
     @GetMapping("/add/{idPost}/{idUser}")
     public ResponseEntity<LikeDto> addLike(@PathVariable("idPost") Long idPost,@PathVariable("idUser") Long idUser) {
@@ -22,6 +25,8 @@ public class LikeController {
         likeDto.setIdPost(idPost);
         likeDto.setIdUser(idUser);
         Likes savedLike = likeService.addLike(likeDto);
+        String port = environment.getProperty("local.server.port");
+        System.out.println(port);
         return new ResponseEntity<>(likeDto, HttpStatus.CREATED);
     }
     @GetMapping("/user/{userId}")

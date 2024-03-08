@@ -1,6 +1,7 @@
 package org.surfsharing.postservice.controller;
 
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class PostController {
         List<PostDto> posts = postService.Feed(adminid);
         return new ResponseEntity<>(posts,HttpStatus.OK);
     }
-
+    @CircuitBreaker(name = "likeservice",fallbackMethod = "likePostFallback")
     @GetMapping("likepost/{idPost}")
     public ResponseEntity<LikeDto> likePost(@PathVariable("idPost") Long idPost,HttpServletRequest request){
         Long adminid = Long.parseLong(request.getHeader("hid"));
@@ -60,7 +61,8 @@ public class PostController {
         return new ResponseEntity<>(likeDto,HttpStatus.OK);
     }
 
-    //  linking friends b chfanchtayger l users
-    // ...
+    public ResponseEntity<String> likePostFallback(Exception e){
+        return new ResponseEntity<>("Reaction Service is down",HttpStatus.OK);
+    }
 
 }
