@@ -30,7 +30,7 @@ public class GroupeUserController {
     private IGroupeUserService groupeUserService;
     /////////////////////////////////////////////
     //work
-    @CircuitBreaker(name = "UserService",fallbackMethod = "UserFullBack")
+    @CircuitBreaker(name = "userserice",fallbackMethod = "UserFullBack")
     @PostMapping()
     public ResponseEntity<Object> ajouterGroupeUser(@RequestBody GroupeUserDto groupeUserDto, HttpServletRequest request) {
         long adminid = Long.parseLong(request.getHeader("hid"));
@@ -52,7 +52,7 @@ public class GroupeUserController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
 
     }
-    @CircuitBreaker(name = "UserService",fallbackMethod = "UserFullBack")
+    @CircuitBreaker(name = "userserice",fallbackMethod = "UserFullBack")
     //work
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteGroupeUser(@RequestBody GroupeUserDto groupeUserDto, HttpServletRequest request) {
@@ -103,7 +103,7 @@ public class GroupeUserController {
         return new ResponseEntity<>(usersInGroup, HttpStatus.OK);
     }
 
-public ResponseEntity<Object> UserFullBack(Exception e){
+    public ResponseEntity<Object> UserFullBack(Exception e){
         return new ResponseEntity<>("User Service is down",HttpStatus.OK);
     }
 
