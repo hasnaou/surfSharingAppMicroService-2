@@ -14,4 +14,5 @@ public class GroupeDto implements Serializable {
     String title;
     Long adminId;
     boolean deleted;
+
 }

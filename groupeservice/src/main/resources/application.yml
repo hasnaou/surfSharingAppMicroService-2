@@ -3,3 +3,6 @@ spring:
     name: groupeservice
   config:
     import: optional:configserver:http://localhost:8888
+  kafka:
+    topic:
+      name: quickstart-events

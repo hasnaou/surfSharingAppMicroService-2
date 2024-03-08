@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.surfsharing.postservice.LikeClient.LikeClient;
+import org.surfsharing.postservice.Producer.postProducer;
 import org.surfsharing.postservice.dto.LikeDto;
 import org.surfsharing.postservice.dto.PostDto;
 import org.surfsharing.postservice.service.impl.IpostService;
@@ -24,13 +25,21 @@ public class PostController {
     private IpostService postService;
     @Autowired
     private LikeClient likeClient;
+    @Autowired
+    private postProducer postproducer;
+
+
     @PostMapping
     public ResponseEntity<PostDto> addPost(@RequestBody PostDto postDto, HttpServletRequest request){
         Long adminid = Long.parseLong(request.getHeader("hid"));
         postDto.setUserId(adminid);
         PostDto post = postService.addPost(postDto);
+        if (post.getGroupeId()!=null) {
+            postproducer.sendMessage(post);
+        }
         return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id,HttpServletRequest request){
        try{
@@ -41,12 +50,14 @@ public class PostController {
            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
        }
     }
+
     @GetMapping("allmyposts")
     public ResponseEntity<List<PostDto>> getAllMyPosts(HttpServletRequest request){
         Long adminid = Long.parseLong(request.getHeader("hid"));
         List<PostDto> posts = postService.getAllPosts(adminid);
         return new ResponseEntity<>(posts,HttpStatus.OK);
     }
+
     @GetMapping("feed")
     public ResponseEntity<List<PostDto>> feed(HttpServletRequest request){
         Long adminid = Long.parseLong(request.getHeader("hid"));

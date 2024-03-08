@@ -14,7 +14,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/exemple
     username: postgres
-    password: 123456789
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: update
@@ -47,3 +47,14 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 2
         slidingWindowSize: 10
         slidingWindowType: COUNT_BASED
+kafka:
+  consumer:
+    bootstrap-servers: localhost:9092
+    group-id: myGroup
+    auto-offset-reset: earliest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      spring.json.trusted.packages: "*"
+  topic:
+    name: quickstart-events

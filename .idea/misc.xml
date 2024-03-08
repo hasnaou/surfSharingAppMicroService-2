@@ -15,11 +15,14 @@
         <option value="$PROJECT_DIR$/gateway/exempleservice/pom.xml" />
         <option value="$PROJECT_DIR$/exempleservice/pom.xml" />
         <option value="$PROJECT_DIR$/usedservice/pom.xml" />
+        <option value="$PROJECT_DIR$/Kafka/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/gateway/exempleservice/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka/pom.xml" />
       </set>
     </option>
   </component>
