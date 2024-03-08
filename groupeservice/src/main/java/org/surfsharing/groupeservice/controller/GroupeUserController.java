@@ -1,5 +1,6 @@
 package org.surfsharing.groupeservice.controller;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
@@ -29,6 +30,7 @@ public class GroupeUserController {
     private IGroupeUserService groupeUserService;
     /////////////////////////////////////////////
     //work
+    @CircuitBreaker(name = "UserService",fallbackMethod = "UserFullBack")
     @PostMapping()
     public ResponseEntity<Object> ajouterGroupeUser(@RequestBody GroupeUserDto groupeUserDto, HttpServletRequest request) {
         long adminid = Long.parseLong(request.getHeader("hid"));
@@ -50,6 +52,7 @@ public class GroupeUserController {
         return new ResponseEntity<>(result, HttpStatus.CREATED);
 
     }
+    @CircuitBreaker(name = "UserService",fallbackMethod = "UserFullBack")
     //work
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteGroupeUser(@RequestBody GroupeUserDto groupeUserDto, HttpServletRequest request) {
@@ -98,6 +101,10 @@ public class GroupeUserController {
     public ResponseEntity<List<GroupeUserDto>> getUsersInGroup(@PathVariable Long groupId) {
         List<GroupeUserDto> usersInGroup = groupeUserService.getUsersInGroup(groupId);
         return new ResponseEntity<>(usersInGroup, HttpStatus.OK);
+    }
+
+public ResponseEntity<Object> UserFullBack(Exception e){
+        return new ResponseEntity<>("User Service is down",HttpStatus.OK);
     }
 
 }
